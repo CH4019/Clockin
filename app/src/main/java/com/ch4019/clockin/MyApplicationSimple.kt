@@ -9,7 +9,7 @@ import cn.leancloud.LeanCloud
 class MyApplicationSimple: Application() {
     override fun onCreate() {
         super.onCreate()
-        LeanCloud.setLogLevel(LCLogger.Level.DEBUG);
+        LeanCloud.setLogLevel(LCLogger.Level.DEBUG)
         LeanCloud.initialize(
             this,
             "appId",
