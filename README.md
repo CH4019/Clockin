@@ -21,4 +21,4 @@
 
 ## License
 
-Docusaurus is [Apache License 2.0](./LICENSE).
+ClockIn is [Apache License 2.0](./LICENSE).
