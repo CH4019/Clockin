@@ -17,11 +17,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +43,8 @@ import com.ch4019.clockin.config.MainNavRoute
 import com.ch4019.clockin.ui.components.TextFieldView
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginPage(navController: NavHostController) {
@@ -45,7 +52,28 @@ fun LoginPage(navController: NavHostController) {
     var passWord by remember { mutableStateOf("") }
     val context = LocalContext.current
     var usePasswordVisualTransformation by remember { mutableStateOf(true) }
-    Scaffold {
+    val hostState = remember { SnackbarHostState() }
+    val  scope = rememberCoroutineScope()
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                hostState = hostState,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp),
+                snackbar = {
+                    Snackbar (
+                        shape = RoundedCornerShape(15.dp),
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ){
+                        Text(text = it.visuals.message)
+                    }
+                }
+            )
+        },
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -137,27 +165,43 @@ fun LoginPage(navController: NavHostController) {
                 }
                 FilledTonalButton(
                     onClick = {
-                        LCUser.logIn(userName,passWord).subscribe(object : Observer<LCUser> {
-                            override fun onSubscribe(d: Disposable) { }
-                            override fun onNext(t: LCUser) {
-                                navController.navigate(MainNavRoute.MAIN_PAGE) {
-                                    popUpTo(MainNavRoute.LOGIN_PAGE) {
-                                        saveState = true
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
+                        when{
+                            userName.length < 3 ->{
+                                scope.launch (Dispatchers.IO){
+                                    hostState.showSnackbar("请输入4位以上字符用户名",duration= SnackbarDuration.Short)
                                 }
                             }
-                            override fun onError(e: Throwable) {
-                                Toast.makeText(
-                                    context,
-                                    "${ e.message }",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                            passWord.length < 6 ->{
+                                scope.launch (Dispatchers.IO){
+                                    hostState.showSnackbar("请输入6位以上字符密码",duration= SnackbarDuration.Short)
+                                }
                             }
-                            override fun onComplete() { }
-                        })
+                            else ->{
+                                LCUser.logIn(userName, passWord).subscribe(object : Observer<LCUser> {
+                                        override fun onSubscribe(d: Disposable) {}
+                                        override fun onNext(t: LCUser) {
+                                            navController.navigate(MainNavRoute.MAIN_PAGE) {
+                                                popUpTo(MainNavRoute.LOGIN_PAGE) {
+                                                    saveState = true
+                                                    inclusive = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
+                                            }
+                                        }
+
+                                        override fun onError(e: Throwable) {
+                                            Toast.makeText(
+                                                context,
+                                                "${e.message}",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+
+                                        override fun onComplete() {}
+                                    })
+                            }
+                        }
                     },
                     shape = RoundedCornerShape(10.dp)
                 ) {
