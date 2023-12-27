@@ -168,17 +168,18 @@ fun MainPage(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp)
                 ) {
                     when (pageState.currentPage) {
                         0 -> {
                             Text(
+                                modifier = Modifier.padding(16.dp),
                                 text = "登录成功1",
                                 style = MaterialTheme.typography.titleLarge,
                             )
                         }
                         1 -> {
                             Text(
+                                modifier = Modifier.padding(16.dp),
                                 text = "登录成功2 ",
                                 style = MaterialTheme.typography.titleLarge,
                             )
