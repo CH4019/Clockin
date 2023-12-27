@@ -155,7 +155,7 @@ fun RegisterPage(navController: NavHostController) {
                 FilledTonalButton(
                     onClick = {
                         when{
-                            userName.length < 3 ->{
+                            userName.length < 4 ->{
                                 scope.launch (Dispatchers.IO){
                                     hostState.showSnackbar("请输入4位以上字符用户名",duration= SnackbarDuration.Short)
                                 }

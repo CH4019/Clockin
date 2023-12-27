@@ -184,10 +184,7 @@ fun MainPage(
                             )
                         }
                         2 -> {
-                            Text(
-                                text = "登录成功3 ",
-                                style = MaterialTheme.typography.titleLarge,
-                            )
+                            UserPage()
                         }
                     }
                 }
