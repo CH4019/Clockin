@@ -70,7 +70,6 @@ fun MainPage(
                         2 ->{
                             IconButton(
                                 onClick = {
-//                                    无法再退出后及时跳转到登录页面
                                     navController.navigate(MainNavRoute.LOGIN_PAGE) {
                                         popUpTo(MainNavRoute.MAIN_PAGE) {
                                             saveState = true
