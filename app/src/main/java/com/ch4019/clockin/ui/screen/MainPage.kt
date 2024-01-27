@@ -19,8 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,11 +34,12 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainPage(
-    navController: NavHostController
+    navController: NavHostController,
+    currentPage: MutableIntState,
 ) {
 //    val userName = LCUser.getCurrentUser().username ?:"111"
     val pageState = rememberPagerState(0) { 3 }
-    val currentPage = remember { mutableIntStateOf(0) }
+//    val currentPage = remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
 
 
@@ -184,7 +184,7 @@ fun MainPage(
                             )
                         }
                         2 -> {
-                            UserPage()
+                            UserPage(navController)
                         }
                     }
                 }

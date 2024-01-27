@@ -6,9 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
@@ -20,9 +24,12 @@ import com.ch4019.clockin.ui.screen.LoginPage
 import com.ch4019.clockin.ui.screen.MainPage
 import com.ch4019.clockin.ui.screen.RegisterPage
 import com.ch4019.clockin.ui.screen.StartPage
+import com.ch4019.clockin.ui.screen.UserPage
+import com.ch4019.clockin.ui.screen.UserQRPage
 import com.ch4019.clockin.ui.theme.ClockinTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //设置全屏
@@ -31,6 +38,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ClockinTheme {
                 val navController = rememberNavController()
+                val currentPage = remember { mutableIntStateOf(0) }
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -62,10 +70,13 @@ class MainActivity : ComponentActivity() {
                             RegisterPage(navController)
                         }
                         composable(MainNavRoute.MAIN_PAGE){
-                            MainPage(navController)
+                            MainPage(navController,currentPage)
                         }
                         composable(MainNavRoute.CLOCKIN_PAGE){
                             ClockInPage(navController)
+                        }
+                        composable(MainNavRoute.USER_QR_PAGE){
+                            UserQRPage(navController)
                         }
                     }
                 }

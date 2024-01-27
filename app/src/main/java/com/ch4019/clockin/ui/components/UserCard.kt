@@ -28,9 +28,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ch4019.clockin.R
+import com.ch4019.clockin.ui.theme.ClockinTheme
 
 @Composable
 fun UserCard(
@@ -41,6 +44,7 @@ fun UserCard(
     userShow: String,
     onClick: () -> Unit = {},
     onEditClick: () -> Unit = {},
+    onQRClick: () -> Unit = {},
 ) {
     Card(
         Modifier
@@ -76,22 +80,25 @@ fun UserCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Row(
-                            verticalAlignment = Alignment.Bottom
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = userName,
                                 style = MaterialTheme.typography.titleLarge
                             )
                             Card(
-                                modifier = Modifier.padding(bottom = 2.dp),
+                                modifier = Modifier.padding(start = 2.dp,top = 1.dp),
                                 colors = CardDefaults.cardColors(
                                     containerColor = Color(0xFFB388FF)
                                 ),
                                 shape = RoundedCornerShape(4.dp)
                             ) {
                                 Text(
-                                    modifier = Modifier.padding(1.dp),
+                                    modifier = Modifier
+                                        .padding(start = 2.dp, end = 1.dp, top = 1.dp),
                                     text = "#$userId",
+                                    fontSize = 10.sp,
+                                    lineHeight = 12.sp,
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -100,7 +107,7 @@ fun UserCard(
                         IconButton(
                             modifier = Modifier
                                 .size(24.dp),
-                            onClick = { /*TODO*/ }
+                            onClick = onQRClick
                         ) {
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.ic_public_input_code),
@@ -129,5 +136,18 @@ fun UserCard(
 
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun UserCardPreview() {
+    ClockinTheme {
+        UserCard(
+            userIcon = R.drawable.map_pin_user_fill,
+            userName = "User Name",
+            userId = "0001",
+            userShow = "User Show",
+        )
     }
 }
